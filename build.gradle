@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
+    }
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+
+version = modVersion
+group = modGroup
+archivesBaseName = modBaseName
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_22"
+    //coreMod = project.coreMod
+    replace "%%UPDATE_URL%%": "$updateUrl/$modBaseName/$project.version"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+processResources {
+    inputs.property "version", project.version
+    expand project.properties
+}
+
+jar {
+    manifest {
+        attributes "FMLAT": "${project.name}_at.cfg"
+        //attributes "FMLCorePluginContainsFMLMod": "true"
+    }
+}

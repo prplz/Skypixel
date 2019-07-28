@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "skypixel",
+    "name": "Skypixel",
+    "version": "${version}",
+    "mcversion": "1.8.9",
+    "url": "https://prplz.io/skypixel",
+    "authorList": [
+      "prplz"
+    ]
+  }
+]
