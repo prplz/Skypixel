@@ -1,12 +1,18 @@
 package io.prplz.skypixel;
 
+import io.prplz.skypixel.gui.ContainerSkyblockEnchantment;
+import io.prplz.skypixel.gui.GuiSkyblockEnchantment;
 import io.prplz.skypixel.utils.NBTUtils;
 import io.prplz.skypixel.utils.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -26,14 +32,17 @@ public class Skypixel {
     private IChatComponent updateMessage;
     private boolean inHypixel;
     private boolean inSkyblock;
+    private boolean forceSkyblock;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         mc = Minecraft.getMinecraft();
 
+        forceSkyblock = Boolean.getBoolean("skypixel.forceSkyblock");
+
         MinecraftForge.EVENT_BUS.register(this);
 
-        String updateUrl = System.getProperty("skypixel.updateurl", "%%UPDATE_URL%%");
+        String updateUrl = System.getProperty("skypixel.updateUrl", "%%UPDATE_URL%%");
         UpdateChecker updater = new UpdateChecker(updateUrl, res -> updateMessage = res.getUpdateMessage());
         updater.start();
     }
@@ -86,6 +95,11 @@ public class Skypixel {
                 }
             }
         }
+
+        if (forceSkyblock) {
+            inHypixel = true;
+            inSkyblock = true;
+        }
     }
 
     @SubscribeEvent
@@ -102,6 +116,21 @@ public class Skypixel {
                 if (event.showAdvancedItemTooltips) {
                     event.toolTip.add(EnumChatFormatting.DARK_GRAY + "Skyblock: " + extraAttributes.getString("id"));
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onOpenGui(GuiOpenEvent event) {
+        if (!inSkyblock) {
+            return;
+        }
+        if (event.gui instanceof GuiChest) {
+            GuiChest gui = (GuiChest) event.gui;
+            ContainerChest container = (ContainerChest) gui.inventorySlots;
+            IInventory chest = container.getLowerChestInventory();
+            if (chest.getName().equals("Enchant Item")) {
+                event.gui = new GuiSkyblockEnchantment(new ContainerSkyblockEnchantment(mc.thePlayer.inventory, chest));
             }
         }
     }

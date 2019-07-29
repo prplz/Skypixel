@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
 public class UpdateChecker extends Thread {
@@ -80,7 +81,7 @@ public class UpdateChecker extends Thread {
 
             int response = con.getResponseCode();
             if (response == 200) {
-                try (InputStreamReader in = new InputStreamReader(con.getInputStream(), "UTF-8")) {
+                try (InputStreamReader in = new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8)) {
                     return gson.fromJson(in, UpdateResponse.class);
                 }
             }
