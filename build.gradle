@@ -56,3 +56,9 @@ jar {
         //attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
+
+// ./gradlew runClient "-PclientArgs=--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
+runClient {
+    args findProperty("clientArgs")?.split() ?: ""
+    jvmArgs "-Dskypixel.forceSkyblock=true"
+}
