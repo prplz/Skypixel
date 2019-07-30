@@ -4,5 +4,6 @@ A mod providing useful things for Hypixel Skyblock.
 It's early days, but you can get it at https://github.com/prplz/Skypixel/releases
 
 ## Features
-- Add anvil usage count to item tooltip
-- Add item IDs to item tooltip (when debug tooltips are enabled)
+- Show anvil uses in item tooltip
+- Show skyblock item IDs in debug tooltip, useful for making resource packs
+- Custom enchanting GUI based on regular Minecraft
