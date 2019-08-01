@@ -192,6 +192,15 @@ public class GuiSkyblockEnchantment extends GuiContainer {
         }
     }
 
+    @Override
+    protected void renderToolTip(ItemStack stack, int x, int y) {
+        // Don't draw tooltip for the enchant item, it covers the enchant list
+        if (stack == container.getEnchantItem()) {
+            return;
+        }
+        super.renderToolTip(stack, x, y);
+    }
+
     public void updateAnimation() {
         ItemStack currentEnchantItem = container.getEnchantItem();
 
