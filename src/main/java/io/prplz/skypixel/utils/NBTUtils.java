@@ -1,34 +1,6 @@
 package io.prplz.skypixel.utils;
 
 public class NBTUtils {
-/*
-            case 0:
-                return new NBTTagEnd();
-            case 1:
-                return new NBTTagByte();
-            case 2:
-                return new NBTTagShort();
-            case 3:
-                return new NBTTagInt();
-            case 4:
-                return new NBTTagLong();
-            case 5:
-                return new NBTTagFloat();
-            case 6:
-                return new NBTTagDouble();
-            case 7:
-                return new NBTTagByteArray();
-            case 8:
-                return new NBTTagString();
-            case 9:
-                return new NBTTagList();
-            case 10:
-                return new NBTTagCompound();
-            case 11:
-                return new NBTTagIntArray();
-            default:
-                return null;
- */
 
     public static final int TYPE_ID_END = 0;
     public static final int TYPE_ID_BYTE = 1;
