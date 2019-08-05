@@ -17,12 +17,15 @@ import org.lwjgl.util.glu.Project;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Most of this copied from GuiEnchantment
 public class GuiSkyblockEnchantment extends GuiContainer {
 
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation("skypixel", "gui/enchant.png");
     private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation("textures/entity/enchanting_table_book.png");
+    private static final Pattern ENCHANT_BUTTON_NAME_PATTERN = Pattern.compile("(?:\u00a7[0-9A-FK-OR])?(\\d+) LEVEL", Pattern.CASE_INSENSITIVE);
     private static final ModelBook MODEL_BOOK = new ModelBook();
 
     private float field_147071_v;
@@ -140,9 +143,14 @@ public class GuiSkyblockEnchantment extends GuiContainer {
             mc.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-            if (enchantButton != null && enchantButton.getItem() == Items.experience_bottle) {
-                int level = enchantButton.stackSize;
-                String levelString = Integer.toString(level);
+            if (enchantButton != null && enchantButton.getItem() == Items.experience_bottle && enchantButton.hasDisplayName()) {
+                Matcher matcher = ENCHANT_BUTTON_NAME_PATTERN.matcher(enchantButton.getDisplayName());
+                int level = 0;
+                String levelString = "";
+                if (matcher.find()) {
+                    levelString = matcher.group(1);
+                    level = Integer.parseInt(levelString);
+                }
                 int textColor;
 
                 if (mc.thePlayer.experienceLevel < level) {
