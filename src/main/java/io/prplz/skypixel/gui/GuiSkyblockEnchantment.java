@@ -245,4 +245,10 @@ public class GuiSkyblockEnchantment extends GuiContainer {
         field_147081_y += (f1 - field_147081_y) * 0.9F;
         field_147071_v += field_147081_y;
     }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        // Overriding this prevents the "drag" click mechanic, which gets cancelled in most skyblock inventories.
+        // Remove when/if hypixel fixes it.
+    }
 }

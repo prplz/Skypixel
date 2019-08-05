@@ -1,6 +1,7 @@
 package io.prplz.skypixel;
 
 import io.prplz.skypixel.gui.ContainerSkyblockEnchantment;
+import io.prplz.skypixel.gui.GuiChestNoDrag;
 import io.prplz.skypixel.gui.GuiSkyblockEnchantment;
 import io.prplz.skypixel.utils.NBTUtils;
 import io.prplz.skypixel.utils.ScoreboardUtils;
@@ -128,9 +129,13 @@ public class Skypixel {
         if (event.gui instanceof GuiChest) {
             GuiChest gui = (GuiChest) event.gui;
             ContainerChest container = (ContainerChest) gui.inventorySlots;
-            IInventory chest = container.getLowerChestInventory();
-            if (chest.getName().equals("Enchant Item")) {
-                event.gui = new GuiSkyblockEnchantment(new ContainerSkyblockEnchantment(mc.thePlayer.inventory, chest));
+            IInventory inventory = container.getLowerChestInventory();
+            if (inventory.getName().equals("Enchant Item")) {
+                event.gui = new GuiSkyblockEnchantment(new ContainerSkyblockEnchantment(mc.thePlayer.inventory, inventory));
+            } else if (inventory.getName().equals("Brewing Stand") || inventory.getName().equals("Anvil")
+                    || inventory.getName().contains(" Minion ") || inventory.getName().equals("Runic Pedestal")
+                    || inventory.getName().equals("Reforge Item")) {
+                event.gui = new GuiChestNoDrag(container);
             }
         }
     }
