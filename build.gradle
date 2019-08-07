@@ -22,6 +22,11 @@ compileJava {
     targetCompatibility = 1.8
 }
 
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
@@ -35,6 +40,7 @@ repositories {
 }
 
 dependencies {
+    testCompile "junit:junit:4.12"
 }
 
 processResources {

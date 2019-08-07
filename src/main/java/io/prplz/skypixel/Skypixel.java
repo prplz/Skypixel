@@ -28,24 +28,34 @@ import static net.minecraftforge.fml.common.Mod.EventHandler;
 @Mod(modid = "skypixel", useMetadata = true)
 public class Skypixel {
 
-    private Minecraft mc;
+    private final Minecraft mc = Minecraft.getMinecraft();
     private int messageDelay = 0;
     private IChatComponent updateMessage;
     private boolean inHypixel;
     private boolean inSkyblock;
     private boolean forceSkyblock;
+    private Keybinds keybinds;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        mc = Minecraft.getMinecraft();
-
         forceSkyblock = Boolean.getBoolean("skypixel.forceSkyblock");
+
+        keybinds = new Keybinds(this);
+        keybinds.register();
 
         MinecraftForge.EVENT_BUS.register(this);
 
         String updateUrl = System.getProperty("skypixel.updateUrl", "%%UPDATE_URL%%");
         UpdateChecker updater = new UpdateChecker(updateUrl, res -> updateMessage = res.getUpdateMessage());
         updater.start();
+    }
+
+    public boolean isInHypixel() {
+        return inHypixel;
+    }
+
+    public boolean isInSkyblock() {
+        return inSkyblock;
     }
 
     @SubscribeEvent
