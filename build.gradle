@@ -31,7 +31,7 @@ minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
     mappings = "stable_22"
-    //coreMod = project.coreMod
+    coreMod = project.coreMod
     replace "%%UPDATE_URL%%": "$updateUrl/$modBaseName/$project.version"
 }
 
@@ -59,7 +59,7 @@ processResources {
 jar {
     manifest {
         attributes "FMLAT": "${project.name}_at.cfg"
-        //attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
 

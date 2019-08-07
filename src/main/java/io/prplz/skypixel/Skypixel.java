@@ -28,6 +28,7 @@ import static net.minecraftforge.fml.common.Mod.EventHandler;
 @Mod(modid = "skypixel", useMetadata = true)
 public class Skypixel {
 
+    private static Skypixel instance;
     private final Minecraft mc = Minecraft.getMinecraft();
     private int messageDelay = 0;
     private IChatComponent updateMessage;
@@ -38,6 +39,8 @@ public class Skypixel {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        instance = this;
+
         forceSkyblock = Boolean.getBoolean("skypixel.forceSkyblock");
 
         keybinds = new Keybinds(this);
@@ -48,6 +51,10 @@ public class Skypixel {
         String updateUrl = System.getProperty("skypixel.updateUrl", "%%UPDATE_URL%%");
         UpdateChecker updater = new UpdateChecker(updateUrl, res -> updateMessage = res.getUpdateMessage());
         updater.start();
+    }
+
+    public static Skypixel get() {
+        return instance;
     }
 
     public boolean isInHypixel() {
