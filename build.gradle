@@ -17,15 +17,8 @@ version = modVersion
 group = modGroup
 archivesBaseName = modBaseName
 
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
-
-compileTestJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
@@ -63,7 +56,7 @@ jar {
     }
 }
 
-// ./gradlew runClient "-PclientArgs=--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
+// ./gradlew runClient -PclientArgs="--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
 runClient {
     args findProperty("clientArgs")?.split() ?: ""
     jvmArgs "-Dskypixel.forceSkyblock=true"
