@@ -61,9 +61,9 @@ public class SettingsGui extends GuiScreen {
                 Feature.enabledIf(settings.cancelInventoryDrag),
                 new FeaturePane(
                         new BooleanPropertyButton(settings.cancelInventoryDrag, FEATURE_CANCEL_INVENTORY_DRAG, 200),
-                        Label.of("Disabled the item dragging mechanic in a few affected Hypixel menus that don't properly support it, making them less glitchy."),
+                        Label.of("Disables the item dragging mechanic in a few affected Hypixel menus that don't properly support it, making them less glitchy."),
                         Label.of("This feature may be be removed once Hypixel fixes the bug on their end."),
-                        Label.of("Affected menus: Brewing Stand, Anvil, Minions, Runic Pedestal and Reforging.")
+                        Label.of("Affected menus: Enchantment, Brewing Stand, Anvil, Minions, Runic Pedestal and Reforging.")
                 )
         ));
         features.add(new Feature(
