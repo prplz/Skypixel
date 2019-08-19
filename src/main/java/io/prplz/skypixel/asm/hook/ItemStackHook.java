@@ -8,6 +8,6 @@ public class ItemStackHook {
      * @return true to cancel item damage, false to proceed as normal
      */
     public static boolean damageItem() {
-        return Skypixel.get().isInSkyblock();
+        return Skypixel.get().isInSkyblock() && Skypixel.get().getSettings().cancelItemDamage.get();
     }
 }

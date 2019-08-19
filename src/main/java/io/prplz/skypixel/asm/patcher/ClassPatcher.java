@@ -1,5 +1,6 @@
 package io.prplz.skypixel.asm.patcher;
 
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
@@ -24,7 +25,9 @@ public abstract class ClassPatcher {
                 List<String> names = Arrays.asList(annotation.name());
                 int found = 0;
                 for (MethodNode methodNode : classNode.methods) {
-                    if (methodNode.desc.equals(annotation.desc()) && names.contains(methodNode.name)) {
+                    String name = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(classNode.name, methodNode.name, methodNode.desc);
+                    String desc = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(methodNode.desc);
+                    if (desc.equals(annotation.desc()) && names.contains(name)) {
                         found++;
                         try {
                             method.invoke(this, methodNode);

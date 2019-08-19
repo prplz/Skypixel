@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 public class ASMUtils {
 
@@ -33,5 +34,9 @@ public class ASMUtils {
 
     public static MethodInsnNode invokeStatic(String owner, String name, String desc) {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, owner, name, desc, false);
+    }
+
+    public static VarInsnNode aload(int var) {
+        return new VarInsnNode(Opcodes.ALOAD, var);
     }
 }

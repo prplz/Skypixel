@@ -1,4 +1,4 @@
-package io.prplz.skypixel.gui;
+package io.prplz.skypixel.gui.replacement;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

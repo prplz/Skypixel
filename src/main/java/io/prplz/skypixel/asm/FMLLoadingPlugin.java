@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.8.9")
-@IFMLLoadingPlugin.SortingIndex(1001) // After deobfuscator
 public class FMLLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override

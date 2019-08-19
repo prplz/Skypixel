@@ -1,6 +1,7 @@
 package io.prplz.skypixel.asm;
 
 import io.prplz.skypixel.asm.patcher.ClassPatcher;
+import io.prplz.skypixel.asm.patcher.GuiScreenPatcher;
 import io.prplz.skypixel.asm.patcher.ItemStackPatcher;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -16,6 +17,7 @@ public class ClassTransformer implements IClassTransformer {
 
     public ClassTransformer() {
         patchers.put("net.minecraft.item.ItemStack", new ItemStackPatcher());
+        patchers.put("net.minecraft.client.gui.GuiScreen", new GuiScreenPatcher());
     }
 
     @Override

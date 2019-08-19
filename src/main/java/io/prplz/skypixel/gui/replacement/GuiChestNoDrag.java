@@ -1,4 +1,4 @@
-package io.prplz.skypixel.gui;
+package io.prplz.skypixel.gui.replacement;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;

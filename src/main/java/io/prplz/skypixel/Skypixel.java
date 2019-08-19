@@ -1,10 +1,11 @@
 package io.prplz.skypixel;
 
-import io.prplz.skypixel.gui.ContainerSkyblockEnchantment;
-import io.prplz.skypixel.gui.GuiChestNoDrag;
-import io.prplz.skypixel.gui.GuiSkyblockEnchantment;
+import io.prplz.skypixel.gui.replacement.ContainerSkyblockEnchantment;
+import io.prplz.skypixel.gui.replacement.GuiChestNoDrag;
+import io.prplz.skypixel.gui.replacement.GuiSkyblockEnchantment;
 import io.prplz.skypixel.utils.NBTUtils;
 import io.prplz.skypixel.utils.ScoreboardUtils;
+import io.prplz.skypixel.utils.TickExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.ContainerChest;
@@ -18,33 +19,66 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import static net.minecraftforge.fml.common.Mod.EventHandler;
 
-@Mod(modid = "skypixel", useMetadata = true)
+@Mod(modid = "skypixel", guiFactory = "io.prplz.skypixel.gui.settings.SettingsGuiFactory", useMetadata = true)
 public class Skypixel {
 
+    private static final Logger logger = LogManager.getLogger();
     private static Skypixel instance;
     private final Minecraft mc = Minecraft.getMinecraft();
+    private File directory;
+    private File settingsFile;
+    private Settings settings;
     private int messageDelay = 0;
     private IChatComponent updateMessage;
     private boolean inHypixel;
     private boolean inSkyblock;
     private boolean forceSkyblock;
     private Keybinds keybinds;
+    private TickExecutor tickExecutor;
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) {
         instance = this;
+
+        directory = new File(event.getModConfigurationDirectory(), "skypixel");
+        directory.mkdirs();
+        settingsFile = new File(directory, "settings.json");
+
+        try (FileReader in = new FileReader(settingsFile)) {
+            settings = Settings.gson.fromJson(in, Settings.class);
+        } catch (FileNotFoundException ignored) {
+            logger.info("Creating " + settingsFile);
+            settings = new Settings();
+            trySaveSettings("Failed to create " + settingsFile);
+        } catch (Exception ex) {
+            logger.warn("Failed to load " + settingsFile, ex);
+            // Backup the broken file to a unique name
+            settingsFile.renameTo(new File(settingsFile.getParent(), settingsFile.getName() + "." + System.currentTimeMillis()));
+            settings = new Settings();
+            trySaveSettings("Failed to create " + settingsFile);
+        }
 
         forceSkyblock = Boolean.getBoolean("skypixel.forceSkyblock");
 
         keybinds = new Keybinds(this);
         keybinds.register();
+
+        tickExecutor = new TickExecutor();
+        tickExecutor.register();
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -57,12 +91,42 @@ public class Skypixel {
         return instance;
     }
 
+    public File getSettingsFile() {
+        return settingsFile;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
     public boolean isInHypixel() {
         return inHypixel;
     }
 
     public boolean isInSkyblock() {
         return inSkyblock;
+    }
+
+    public Keybinds getKeybinds() {
+        return keybinds;
+    }
+
+    public TickExecutor getTickExecutor() {
+        return tickExecutor;
+    }
+
+    public void saveSettings() throws Exception {
+        try (FileWriter writer = new FileWriter(settingsFile)) {
+            Settings.gson.toJson(settings, writer);
+        }
+    }
+
+    public void trySaveSettings(String message) {
+        try {
+            saveSettings();
+        } catch (Exception ex) {
+            logger.warn(message, ex);
+        }
     }
 
     @SubscribeEvent
@@ -128,7 +192,7 @@ public class Skypixel {
         if (event.itemStack.hasTagCompound()) {
             if (event.itemStack.getTagCompound().hasKey("ExtraAttributes", NBTUtils.TYPE_ID_COMPOUND)) {
                 NBTTagCompound extraAttributes = event.itemStack.getTagCompound().getCompoundTag("ExtraAttributes");
-                if (extraAttributes.hasKey("anvil_uses", NBTUtils.TYPE_ID_INT)) {
+                if (settings.anvilUsesEnabled.get() && extraAttributes.hasKey("anvil_uses", NBTUtils.TYPE_ID_INT)) {
                     event.toolTip.add(1, EnumChatFormatting.GRAY + "Anvil uses: " + extraAttributes.getInteger("anvil_uses"));
                 }
                 if (event.showAdvancedItemTooltips) {
@@ -148,11 +212,17 @@ public class Skypixel {
             ContainerChest container = (ContainerChest) gui.inventorySlots;
             IInventory inventory = container.getLowerChestInventory();
             if (inventory.getName().equals("Enchant Item")) {
-                event.gui = new GuiSkyblockEnchantment(new ContainerSkyblockEnchantment(mc.thePlayer.inventory, inventory));
+                if (settings.enchantmentGuiEnabled.get()) {
+                    event.gui = new GuiSkyblockEnchantment(new ContainerSkyblockEnchantment(mc.thePlayer.inventory, inventory));
+                } else if (settings.cancelInventoryDrag.get()) {
+                    event.gui = new GuiChestNoDrag(container);
+                }
             } else if (inventory.getName().equals("Brewing Stand") || inventory.getName().equals("Anvil")
                     || inventory.getName().contains(" Minion ") || inventory.getName().equals("Runic Pedestal")
                     || inventory.getName().equals("Reforge Item")) {
-                event.gui = new GuiChestNoDrag(container);
+                if (settings.cancelInventoryDrag.get()) {
+                    event.gui = new GuiChestNoDrag(container);
+                }
             }
         }
     }

@@ -1,4 +1,13 @@
+skypixel.feature_anvil_uses=Show Anvil Uses
+skypixel.feature_cancel_inventory_drag=Cancel Inventory Drag
+skypixel.feature_cancel_item_damage=Cancel Item Damage
+skypixel.feature_enchantment_menu=Custom Enchantment Menu
+skypixel.feature_keybinds=Keybinds
 skypixel.key_categories_skypixel=Skypixel
 skypixel.key_menu=Skyblock Menu
 skypixel.key_warp_home=Warp to your Island
 skypixel.key_warp_hub=Warp to Hub
+skypixel.setting_disabled=§cDisabled
+skypixel.setting_enabled=§aEnabled
+skypixel.setting_off=§cOff
+skypixel.setting_on=§aOn

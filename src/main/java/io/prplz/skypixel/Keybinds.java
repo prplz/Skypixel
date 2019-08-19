@@ -66,4 +66,8 @@ public class Keybinds {
             }
         }
     }
+
+    public boolean isAnyKeybindEnabled() {
+        return keyBindingMenu.getKeyCode() != 0 || keyBindingWarpHome.getKeyCode() != 0 || keyBindingWarpHub.getKeyCode() != 0;
+    }
 }

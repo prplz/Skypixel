@@ -1,4 +1,4 @@
-package io.prplz.skypixel.gui;
+package io.prplz.skypixel.gui.replacement;
 
 import io.prplz.skypixel.utils.ItemUtils;
 import net.minecraft.client.gui.ScaledResolution;
