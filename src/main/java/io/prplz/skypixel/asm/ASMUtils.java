@@ -39,4 +39,8 @@ public class ASMUtils {
     public static VarInsnNode aload(int var) {
         return new VarInsnNode(Opcodes.ALOAD, var);
     }
+
+    public static VarInsnNode iload(int var) {
+        return new VarInsnNode(Opcodes.ILOAD, var);
+    }
 }

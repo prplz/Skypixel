@@ -104,8 +104,8 @@ public class GuiSkyblockEnchantment extends GuiContainer {
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         float f3 = field_147069_w + (field_147071_v - field_147069_w) * partialTicks + 0.25F;
         float f4 = field_147069_w + (field_147071_v - field_147069_w) * partialTicks + 0.75F;
-        f3 = (f3 - (float) MathHelper.truncateDoubleToInt((double) f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float) MathHelper.truncateDoubleToInt((double) f4)) * 1.6F - 0.3F;
+        f3 = (f3 - (float) MathHelper.truncateDoubleToInt(f3)) * 1.6F - 0.3F;
+        f4 = (f4 - (float) MathHelper.truncateDoubleToInt(f4)) * 1.6F - 0.3F;
 
         if (f3 < 0.0F) {
             f3 = 0.0F;

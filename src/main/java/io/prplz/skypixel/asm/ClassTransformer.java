@@ -3,6 +3,7 @@ package io.prplz.skypixel.asm;
 import io.prplz.skypixel.asm.patcher.ClassPatcher;
 import io.prplz.skypixel.asm.patcher.GuiScreenPatcher;
 import io.prplz.skypixel.asm.patcher.ItemStackPatcher;
+import io.prplz.skypixel.asm.patcher.RenderItemPatcher;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -18,6 +19,7 @@ public class ClassTransformer implements IClassTransformer {
     public ClassTransformer() {
         patchers.put("net.minecraft.item.ItemStack", new ItemStackPatcher());
         patchers.put("net.minecraft.client.gui.GuiScreen", new GuiScreenPatcher());
+        patchers.put("net.minecraft.client.renderer.entity.RenderItem", new RenderItemPatcher());
     }
 
     @Override

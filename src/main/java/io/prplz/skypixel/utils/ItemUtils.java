@@ -27,4 +27,11 @@ public class ItemUtils {
         }
         return loreList;
     }
+
+    public static NBTTagCompound getExtraAttributes(ItemStack item) {
+        if (item.hasTagCompound() && item.getTagCompound().hasKey("ExtraAttributes", NBTUtils.TYPE_ID_COMPOUND)) {
+            return item.getTagCompound().getCompoundTag("ExtraAttributes");
+        }
+        return null;
+    }
 }

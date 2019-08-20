@@ -7,6 +7,7 @@ import io.prplz.skypixel.utils.NBTUtils;
 import io.prplz.skypixel.utils.ScoreboardUtils;
 import io.prplz.skypixel.utils.TickExecutor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
@@ -14,11 +15,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -49,6 +52,7 @@ public class Skypixel {
     private boolean forceSkyblock;
     private Keybinds keybinds;
     private TickExecutor tickExecutor;
+    private FontRenderer romanNumeralsFont;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -87,6 +91,12 @@ public class Skypixel {
         updater.start();
     }
 
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        romanNumeralsFont = new FontRenderer(mc.gameSettings, new ResourceLocation("skypixel", "font/roman_numerals.png"), mc.renderEngine, false);
+        romanNumeralsFont.onResourceManagerReload(mc.getResourceManager());
+    }
+
     public static Skypixel get() {
         return instance;
     }
@@ -113,6 +123,10 @@ public class Skypixel {
 
     public TickExecutor getTickExecutor() {
         return tickExecutor;
+    }
+
+    public FontRenderer getRomanNumeralsFont() {
+        return romanNumeralsFont;
     }
 
     public void saveSettings() throws Exception {

@@ -3,6 +3,8 @@ package io.prplz.skypixel.gui.settings;
 import io.prplz.skypixel.Settings;
 import io.prplz.skypixel.Skypixel;
 import io.prplz.skypixel.gui.BooleanPropertyButton;
+import io.prplz.skypixel.gui.ChatColorPropertyPicker;
+import io.prplz.skypixel.gui.EnumPropertyButton;
 import io.prplz.skypixel.gui.Image;
 import io.prplz.skypixel.gui.Label;
 import io.prplz.skypixel.gui.Pane;
@@ -45,6 +47,17 @@ public class SettingsGui extends GuiScreen {
                         Label.of("Shows the item's anvil uses in the tooltip."),
                         Label.of("A higher anvil use count incurs a higher cost when combining items in an anvil."),
                         new Image(new ResourceLocation("skypixel", "screenshots/anvil_uses.png"))
+                )
+        ));
+        features.add(new Feature(
+                FEATURE_ITEM_TIER.format(),
+                Feature.enabledIf(() -> settings.minionItemTierEnabled.get() || settings.potionItemTierEnabled.get() || settings.armorItemTierEnabled.get()),
+                new FeaturePane(
+                        new BooleanPropertyButton(settings.minionItemTierEnabled, FEATURE_ITEM_TIER_MINION, 200),
+                        new BooleanPropertyButton(settings.potionItemTierEnabled, FEATURE_ITEM_TIER_POTION, 200),
+                        new BooleanPropertyButton(settings.armorItemTierEnabled, FEATURE_ITEM_TIER_ARMOR, 200),
+                        new EnumPropertyButton<>(settings.itemTierType, Settings.NumeralType.class, FEATURE_NUMERAL_TYPE::format, 200),
+                        new ChatColorPropertyPicker(settings.itemTierColor, FEATURE_TEXT_COLOR.format())
                 )
         ));
         features.add(new Feature(
