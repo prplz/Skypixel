@@ -1,5 +1,6 @@
 package io.prplz.skypixel;
 
+import io.prplz.skypixel.command.SkypixelCommand;
 import io.prplz.skypixel.gui.replacement.ContainerSkyblockEnchantment;
 import io.prplz.skypixel.gui.replacement.GuiChestNoDrag;
 import io.prplz.skypixel.gui.replacement.GuiSkyblockEnchantment;
@@ -16,6 +17,7 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -83,6 +85,8 @@ public class Skypixel {
 
         tickExecutor = new TickExecutor();
         tickExecutor.register();
+
+        ClientCommandHandler.instance.registerCommand(new SkypixelCommand());
 
         MinecraftForge.EVENT_BUS.register(this);
 
