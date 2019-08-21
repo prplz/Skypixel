@@ -1,6 +1,7 @@
 package io.prplz.skypixel.asm;
 
 import io.prplz.skypixel.asm.patcher.ClassPatcher;
+import io.prplz.skypixel.asm.patcher.ClientCommandHandlerPatcher;
 import io.prplz.skypixel.asm.patcher.ItemStackPatcher;
 import io.prplz.skypixel.asm.patcher.RenderItemPatcher;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -18,6 +19,7 @@ public class ClassTransformer implements IClassTransformer {
     public ClassTransformer() {
         patchers.put("net.minecraft.item.ItemStack", new ItemStackPatcher());
         patchers.put("net.minecraft.client.renderer.entity.RenderItem", new RenderItemPatcher());
+        patchers.put("net.minecraftforge.client.ClientCommandHandler", new ClientCommandHandlerPatcher());
     }
 
     @Override

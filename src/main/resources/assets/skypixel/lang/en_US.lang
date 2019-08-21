@@ -1,6 +1,7 @@
 skypixel.feature_anvil_uses=Show Anvil Uses
 skypixel.feature_cancel_inventory_drag=Cancel Inventory Drag
 skypixel.feature_cancel_item_damage=Cancel Item Damage
+skypixel.feature_client_command_fix=Client Command Fix
 skypixel.feature_enchantment_menu=Custom Enchantment Menu
 skypixel.feature_item_tier=Show Item Tier
 skypixel.feature_item_tier_armor=Armor

@@ -2,6 +2,7 @@ package io.prplz.skypixel.gui.settings;
 
 import io.prplz.skypixel.Settings;
 import io.prplz.skypixel.Skypixel;
+import io.prplz.skypixel.Translation;
 import io.prplz.skypixel.gui.BooleanPropertyButton;
 import io.prplz.skypixel.gui.ChatColorPropertyPicker;
 import io.prplz.skypixel.gui.EnumPropertyButton;
@@ -84,6 +85,15 @@ public class SettingsGui extends GuiScreen {
                 Feature.enabledIf(skypixel.getKeybinds()::isAnyKeybindEnabled),
                 new FeaturePane(
                         Label.of("Keybinds can be configured in Minecraft's controls menu.")
+                )
+        ));
+        features.add(new Feature(
+                FEATURE_CLIENT_COMMAND_FIX.format(),
+                Feature.enabledIf(settings.forgeClientCommandFix),
+                new FeaturePane(
+                        new BooleanPropertyButton(settings.forgeClientCommandFix, FEATURE_CLIENT_COMMAND_FIX, 200),
+                        Label.of("Applies a fix for Forge client commands intercepting chat which does not start with a forward slash."),
+                        Label.of("For example, without this fix you can't send a chat message starting with \"skypixel\".")
                 )
         ));
         featureList = new FeatureList(this, features);

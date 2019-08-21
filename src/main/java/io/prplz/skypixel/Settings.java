@@ -22,6 +22,7 @@ public class Settings {
     public Property<Boolean> armorItemTierEnabled = new Property<>(true);
     public Property<ChatColor> itemTierColor = new Property<>(ChatColor.WHITE);
     public Property<NumeralType> itemTierType = new Property<>(NumeralType.ROMAN);
+    public Property<Boolean> forgeClientCommandFix = new Property<>(true);
 
     @SuppressWarnings("unused")
     public enum NumeralType {
