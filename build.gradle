@@ -26,6 +26,9 @@ minecraft {
     mappings = "stable_22"
     coreMod = project.coreMod
     replace "%%UPDATE_URL%%": "$updateUrl/$modBaseName/$project.version"
+    // ./gradlew runClient -PclientArgs="--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
+    clientRunArgs = findProperty("clientArgs")?.split() ?: []
+    clientJvmArgs = ["-Dskypixel.forceSkyblock=true"]
 }
 
 repositories {
@@ -37,27 +40,14 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-        expand("version": project.version)
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+    inputs.properties project.properties.findAll { it.value instanceof String }
+    filesMatching("*.info") {
+        expand project.properties
     }
 }
 
 jar {
     manifest {
-        attributes "FMLAT": "${project.name}_at.cfg"
-        attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes FMLAT: "${project.name}_at.cfg", FMLCorePluginContainsFMLMod: true
     }
-}
-
-// ./gradlew runClient -PclientArgs="--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
-runClient {
-    args findProperty("clientArgs")?.split() ?: ""
-    jvmArgs "-Dskypixel.forceSkyblock=true"
 }
