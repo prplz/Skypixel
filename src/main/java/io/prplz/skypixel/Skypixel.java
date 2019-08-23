@@ -4,6 +4,7 @@ import io.prplz.skypixel.command.SkypixelCommand;
 import io.prplz.skypixel.gui.replacement.ContainerSkyblockEnchantment;
 import io.prplz.skypixel.gui.replacement.GuiChestNoDrag;
 import io.prplz.skypixel.gui.replacement.GuiSkyblockEnchantment;
+import io.prplz.skypixel.utils.ItemUtils;
 import io.prplz.skypixel.utils.NBTUtils;
 import io.prplz.skypixel.utils.ScoreboardUtils;
 import io.prplz.skypixel.utils.TickExecutor;
@@ -207,15 +208,13 @@ public class Skypixel {
         if (!inSkyblock) {
             return;
         }
-        if (event.itemStack.hasTagCompound()) {
-            if (event.itemStack.getTagCompound().hasKey("ExtraAttributes", NBTUtils.TYPE_ID_COMPOUND)) {
-                NBTTagCompound extraAttributes = event.itemStack.getTagCompound().getCompoundTag("ExtraAttributes");
-                if (settings.anvilUsesEnabled.get() && extraAttributes.hasKey("anvil_uses", NBTUtils.TYPE_ID_INT)) {
-                    event.toolTip.add(1, EnumChatFormatting.GRAY + "Anvil uses: " + extraAttributes.getInteger("anvil_uses"));
-                }
-                if (event.showAdvancedItemTooltips) {
-                    event.toolTip.add(EnumChatFormatting.DARK_GRAY + "Skyblock: " + extraAttributes.getString("id"));
-                }
+        NBTTagCompound skyblockData = ItemUtils.getExtraAttributes(event.itemStack);
+        if (skyblockData != null) {
+            if (settings.anvilUsesEnabled.get() && skyblockData.hasKey("anvil_uses", NBTUtils.TYPE_ID_INT)) {
+                event.toolTip.add(1, EnumChatFormatting.GRAY + "Anvil uses: " + skyblockData.getInteger("anvil_uses"));
+            }
+            if (event.showAdvancedItemTooltips) {
+                event.toolTip.add(EnumChatFormatting.DARK_GRAY + "Skyblock: " + skyblockData.getString("id"));
             }
         }
     }
