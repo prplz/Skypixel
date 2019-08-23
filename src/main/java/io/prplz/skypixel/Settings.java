@@ -16,7 +16,7 @@ public class Settings {
     public Property<Boolean> enchantmentGuiEnabled = new Property<>(true);
     public Property<Boolean> anvilUsesEnabled = new Property<>(true);
     public Property<AnvilUsesPosition> anvilUsesPosition = new Property<>(AnvilUsesPosition.TOP);
-    public Property<ChatColor> anvilUsesColor = new Property<>(ChatColor.WHITE);
+    public Property<ChatColor> anvilUsesColor = new Property<>(ChatColor.GRAY);
     public Property<Boolean> cancelItemDamage = new Property<>(true);
     public Property<Boolean> cancelInventoryDrag = new Property<>(true);
     public Property<Boolean> minionItemTierEnabled = new Property<>(true);
