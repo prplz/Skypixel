@@ -34,7 +34,7 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_ENCHANTMENT_MENU.format(),
                 Feature.enabledIf(settings.enchantmentGuiEnabled),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.enchantmentGuiEnabled, FEATURE_ENCHANTMENT_MENU, 200),
+                        new BooleanPropertyButton(settings.enchantmentGuiEnabled, FEATURE_ENCHANTMENT_MENU_ENABLED::format, 200),
                         Label.of("Replaces Hypixel's enchantment table menu with a custom menu that looks similar to the one in regular Minecraft."),
                         new Image(new ResourceLocation("skypixel", "screenshots/enchant.png"))
                 )
@@ -43,7 +43,7 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_ANVIL_USES.format(),
                 Feature.enabledIf(settings.anvilUsesEnabled),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.anvilUsesEnabled, FEATURE_ANVIL_USES, 200),
+                        new BooleanPropertyButton(settings.anvilUsesEnabled, FEATURE_ANVIL_USES_ENABLED::format, 200),
                         new EnumPropertyButton<>(settings.anvilUsesPosition, Settings.AnvilUsesPosition.class, FEATURE_ANVIL_USES_POSITION::format, 200),
                         new ChatColorPropertyPicker(settings.anvilUsesColor, FEATURE_TEXT_COLOR.format()),
                         Label.of("Shows the item's anvil uses in the tooltip."),
@@ -55,9 +55,9 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_ITEM_TIER.format(),
                 Feature.enabledIf(() -> settings.minionItemTierEnabled.get() || settings.potionItemTierEnabled.get() || settings.armorItemTierEnabled.get()),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.minionItemTierEnabled, FEATURE_ITEM_TIER_MINION, 200),
-                        new BooleanPropertyButton(settings.potionItemTierEnabled, FEATURE_ITEM_TIER_POTION, 200),
-                        new BooleanPropertyButton(settings.armorItemTierEnabled, FEATURE_ITEM_TIER_ARMOR, 200),
+                        new BooleanPropertyButton(settings.minionItemTierEnabled, FEATURE_ITEM_TIER_MINION::format, 200),
+                        new BooleanPropertyButton(settings.potionItemTierEnabled, FEATURE_ITEM_TIER_POTION::format, 200),
+                        new BooleanPropertyButton(settings.armorItemTierEnabled, FEATURE_ITEM_TIER_ARMOR::format, 200),
                         new EnumPropertyButton<>(settings.itemTierType, Settings.NumeralType.class, FEATURE_NUMERAL_TYPE::format, 200),
                         new ChatColorPropertyPicker(settings.itemTierColor, FEATURE_TEXT_COLOR.format())
                 )
@@ -66,7 +66,7 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_CANCEL_ITEM_DAMAGE.format(),
                 Feature.enabledIf(settings.cancelItemDamage),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.cancelItemDamage, FEATURE_CANCEL_ITEM_DAMAGE, 200),
+                        new BooleanPropertyButton(settings.cancelItemDamage, FEATURE_CANCEL_ITEM_DAMAGE_ENABLED::format, 200),
                         Label.of("Prevents the game client from trying to apply damage to tools and weapons."),
                         Label.of("This fixes some buggy behaviour caused by the server constantly updating your items.")
                 )
@@ -75,7 +75,7 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_CANCEL_INVENTORY_DRAG.format(),
                 Feature.enabledIf(settings.cancelInventoryDrag),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.cancelInventoryDrag, FEATURE_CANCEL_INVENTORY_DRAG, 200),
+                        new BooleanPropertyButton(settings.cancelInventoryDrag, FEATURE_CANCEL_INVENTORY_DRAG_ENABLED::format, 200),
                         Label.of("Disables the item dragging mechanic in a few affected Hypixel menus that don't properly support it, making them less glitchy."),
                         Label.of("This feature may be be removed once Hypixel fixes the bug on their end."),
                         Label.of("Affected menus: Enchantment, Brewing Stand, Anvil, Minions, Runic Pedestal and Reforging.")
@@ -92,7 +92,7 @@ public class SettingsGui extends GuiScreen {
                 FEATURE_CLIENT_COMMAND_FIX.format(),
                 Feature.enabledIf(settings.forgeClientCommandFix),
                 new FeaturePane(
-                        new BooleanPropertyButton(settings.forgeClientCommandFix, FEATURE_CLIENT_COMMAND_FIX, 200),
+                        new BooleanPropertyButton(settings.forgeClientCommandFix, FEATURE_CLIENT_COMMAND_FIX_ENABLED::format, 200),
                         Label.of("Applies a fix for Forge client commands intercepting chat which does not start with a forward slash."),
                         Label.of("For example, without this fix you can't send a chat message starting with \"skypixel\".")
                 )
