@@ -5,6 +5,7 @@ import net.minecraft.client.resources.I18n;
 public enum Translation {
 
     FEATURE_ANVIL_USES,
+    FEATURE_ANVIL_USES_POSITION,
     FEATURE_CANCEL_INVENTORY_DRAG,
     FEATURE_CANCEL_ITEM_DAMAGE,
     FEATURE_CLIENT_COMMAND_FIX,

@@ -211,7 +211,16 @@ public class Skypixel {
         NBTTagCompound skyblockData = ItemUtils.getExtraAttributes(event.itemStack);
         if (skyblockData != null) {
             if (settings.anvilUsesEnabled.get() && skyblockData.hasKey("anvil_uses", NBTUtils.TYPE_ID_INT)) {
-                event.toolTip.add(1, EnumChatFormatting.GRAY + "Anvil uses: " + skyblockData.getInteger("anvil_uses"));
+                String text = settings.anvilUsesColor.get().controlString + "Anvil uses: " + skyblockData.getInteger("anvil_uses");
+                if (settings.anvilUsesPosition.get() == Settings.AnvilUsesPosition.TOP) {
+                    event.toolTip.add(1, text);
+                } else {
+                    if (event.showAdvancedItemTooltips) {
+                        event.toolTip.add(event.toolTip.size() - 2, text);
+                    } else {
+                        event.toolTip.add(text);
+                    }
+                }
             }
             if (event.showAdvancedItemTooltips) {
                 event.toolTip.add(EnumChatFormatting.DARK_GRAY + "Skyblock: " + skyblockData.getString("id"));

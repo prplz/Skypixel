@@ -2,7 +2,6 @@ package io.prplz.skypixel.gui.settings;
 
 import io.prplz.skypixel.Settings;
 import io.prplz.skypixel.Skypixel;
-import io.prplz.skypixel.Translation;
 import io.prplz.skypixel.gui.BooleanPropertyButton;
 import io.prplz.skypixel.gui.ChatColorPropertyPicker;
 import io.prplz.skypixel.gui.EnumPropertyButton;
@@ -45,6 +44,8 @@ public class SettingsGui extends GuiScreen {
                 Feature.enabledIf(settings.anvilUsesEnabled),
                 new FeaturePane(
                         new BooleanPropertyButton(settings.anvilUsesEnabled, FEATURE_ANVIL_USES, 200),
+                        new EnumPropertyButton<>(settings.anvilUsesPosition, Settings.AnvilUsesPosition.class, FEATURE_ANVIL_USES_POSITION::format, 200),
+                        new ChatColorPropertyPicker(settings.anvilUsesColor, FEATURE_TEXT_COLOR.format()),
                         Label.of("Shows the item's anvil uses in the tooltip."),
                         Label.of("A higher anvil use count incurs a higher cost when combining items in an anvil."),
                         new Image(new ResourceLocation("skypixel", "screenshots/anvil_uses.png"))

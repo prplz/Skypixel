@@ -1,4 +1,5 @@
 skypixel.feature_anvil_uses=Show Anvil Uses
+skypixel.feature_anvil_uses_position=Text Position: %s
 skypixel.feature_cancel_inventory_drag=Cancel Inventory Drag
 skypixel.feature_cancel_item_damage=Cancel Item Damage
 skypixel.feature_client_command_fix=Client Command Fix
@@ -16,6 +17,8 @@ skypixel.key_warp_home=Warp to your Island
 skypixel.key_warp_hub=Warp to Hub
 skypixel.numeral_type_arabic=Arabic
 skypixel.numeral_type_roman=Roman
+skypixel.position_bottom=Bottom
+skypixel.position_top=Top
 skypixel.setting_disabled=§cDisabled
 skypixel.setting_enabled=§aEnabled
 skypixel.setting_off=§cOff

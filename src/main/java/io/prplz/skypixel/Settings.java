@@ -15,6 +15,8 @@ public class Settings {
 
     public Property<Boolean> enchantmentGuiEnabled = new Property<>(true);
     public Property<Boolean> anvilUsesEnabled = new Property<>(true);
+    public Property<AnvilUsesPosition> anvilUsesPosition = new Property<>(AnvilUsesPosition.TOP);
+    public Property<ChatColor> anvilUsesColor = new Property<>(ChatColor.WHITE);
     public Property<Boolean> cancelItemDamage = new Property<>(true);
     public Property<Boolean> cancelInventoryDrag = new Property<>(true);
     public Property<Boolean> minionItemTierEnabled = new Property<>(true);
@@ -23,6 +25,18 @@ public class Settings {
     public Property<ChatColor> itemTierColor = new Property<>(ChatColor.WHITE);
     public Property<NumeralType> itemTierType = new Property<>(NumeralType.ROMAN);
     public Property<Boolean> forgeClientCommandFix = new Property<>(true);
+
+
+    @SuppressWarnings("unused")
+    public enum AnvilUsesPosition {
+        TOP,
+        BOTTOM;
+
+        @Override
+        public String toString() {
+            return I18n.format("skypixel.position_" + name().toLowerCase());
+        }
+    }
 
     @SuppressWarnings("unused")
     public enum NumeralType {
