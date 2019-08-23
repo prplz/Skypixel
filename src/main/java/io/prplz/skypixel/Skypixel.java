@@ -168,15 +168,8 @@ public class Skypixel {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (mc.thePlayer == null) {
+        if (mc.thePlayer == null || event.phase != TickEvent.Phase.END) {
             return;
-        }
-
-        if (updateMessage != null) {
-            if (++messageDelay == 80) {
-                mc.thePlayer.addChatMessage(updateMessage);
-                updateMessage = null;
-            }
         }
 
         if (!inHypixel) {
@@ -200,6 +193,14 @@ public class Skypixel {
         if (forceSkyblock) {
             inHypixel = true;
             inSkyblock = true;
+        }
+
+        // Alert the player of the update four seconds after joining skyblock
+        if (updateMessage != null && inSkyblock) {
+            if (++messageDelay == 80) {
+                mc.thePlayer.addChatMessage(updateMessage);
+                updateMessage = null;
+            }
         }
     }
 
