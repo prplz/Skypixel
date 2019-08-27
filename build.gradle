@@ -28,7 +28,7 @@ minecraft {
     replace "%%UPDATE_URL%%": "$updateUrl/$modBaseName/$project.version"
     // ./gradlew runClient -PclientArgs="--accessToken xxxxx --uuid ef1d2c32a2344fd8b116299221c1ec92 --username prplz"
     clientRunArgs = findProperty("clientArgs")?.split() ?: []
-    clientJvmArgs = ["-Dskypixel.forceSkyblock=true"]
+    clientJvmArgs = ["-Dskypixel.forceSkyblock=true", "-XX:+DisableExplicitGC"]
 }
 
 repositories {
