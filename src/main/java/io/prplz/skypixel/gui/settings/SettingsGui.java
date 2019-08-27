@@ -63,6 +63,13 @@ public class SettingsGui extends GuiScreen {
                 )
         ));
         features.add(new Feature(
+                FEATURE_HIDE_PLAYERS.format(),
+                Feature.enabledIf(() -> settings.hidePlayersNearNpcs.get()),
+                new FeaturePane(
+                        new BooleanPropertyButton(settings.hidePlayersNearNpcs, FEATURE_HIDE_PLAYERS_NEAR_NPCS::format, 200)
+                )
+        ));
+        features.add(new Feature(
                 FEATURE_CANCEL_ITEM_DAMAGE.format(),
                 Feature.enabledIf(settings.cancelItemDamage),
                 new FeaturePane(

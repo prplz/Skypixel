@@ -11,6 +11,8 @@ import io.prplz.skypixel.utils.TickExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,6 +38,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.minecraftforge.fml.common.Mod.EventHandler;
 
@@ -56,6 +60,7 @@ public class Skypixel {
     private Keybinds keybinds;
     private TickExecutor tickExecutor;
     private FontRenderer romanNumeralsFont;
+    private final List<EntityPlayer> npcs = new ArrayList<>();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -195,11 +200,20 @@ public class Skypixel {
             inSkyblock = true;
         }
 
-        // Alert the player of the update four seconds after joining skyblock
-        if (updateMessage != null && inSkyblock) {
-            if (++messageDelay == 80) {
-                mc.thePlayer.addChatMessage(updateMessage);
-                updateMessage = null;
+        npcs.clear();
+
+        if (inSkyblock) {
+            // Alert the player of the update four seconds after joining skyblock
+            if (updateMessage != null) {
+                if (++messageDelay == 80) {
+                    mc.thePlayer.addChatMessage(updateMessage);
+                    updateMessage = null;
+                }
+            }
+            for (EntityPlayer player : mc.theWorld.playerEntities) {
+                if (player.getUniqueID().version() == 2) {
+                    npcs.add(player);
+                }
             }
         }
     }
@@ -252,5 +266,19 @@ public class Skypixel {
                 }
             }
         }
+    }
+
+    public boolean shouldHideEntity(Entity entity) {
+        if (entity == mc.thePlayer) {
+            return false;
+        }
+        if (settings.hidePlayersNearNpcs.get() && entity instanceof EntityPlayer && entity.getUniqueID().version() == 4) {
+            for (EntityPlayer npc : npcs) {
+                if (entity.getDistanceSqToEntity(npc) < 1.5 * 1.5) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

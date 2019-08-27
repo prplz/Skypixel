@@ -25,6 +25,7 @@ public class Settings {
     public Property<ChatColor> itemTierColor = new Property<>(ChatColor.WHITE);
     public Property<NumeralType> itemTierType = new Property<>(NumeralType.ROMAN);
     public Property<Boolean> forgeClientCommandFix = new Property<>(true);
+    public Property<Boolean> hidePlayersNearNpcs = new Property<>(false);
 
 
     @SuppressWarnings("unused")
