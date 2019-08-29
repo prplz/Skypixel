@@ -6,6 +6,7 @@ import io.prplz.skypixel.asm.patcher.EntityRendererPatcher;
 import io.prplz.skypixel.asm.patcher.ItemStackPatcher;
 import io.prplz.skypixel.asm.patcher.RenderItemPatcher;
 import io.prplz.skypixel.asm.patcher.RenderManagerPatcher;
+import io.prplz.skypixel.asm.patcher.TileEntityEndPortalRendererPatcher;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -24,6 +25,7 @@ public class ClassTransformer implements IClassTransformer {
         patchers.put("net.minecraftforge.client.ClientCommandHandler", new ClientCommandHandlerPatcher());
         patchers.put("net.minecraft.client.renderer.entity.RenderManager", new RenderManagerPatcher());
         patchers.put("net.minecraft.client.renderer.EntityRenderer", new EntityRendererPatcher());
+        patchers.put("net.minecraft.client.renderer.tileentity.TileEntityEndPortalRenderer", new TileEntityEndPortalRendererPatcher());
     }
 
     @Override
