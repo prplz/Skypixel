@@ -74,7 +74,7 @@ public class SettingsGui extends GuiScreen {
                 Feature.enabledIf(settings.hideEndPortals),
                 new FeaturePane(
                         new BooleanPropertyButton(settings.hideEndPortals, FEATURE_HIDE_END_PORTALS_ENABLED::format, 200),
-                        Label.of("Hides all end portal portal blocks, which are known to reduce frame rate."),
+                        Label.of("Hides all end portal blocks, which are known to reduce frame rate."),
                         new Image(new ResourceLocation("skypixel", "screenshots/hide_end_portal.png"))
                 )
         ));
