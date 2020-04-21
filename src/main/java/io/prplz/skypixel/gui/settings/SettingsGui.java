@@ -6,7 +6,6 @@ import io.prplz.skypixel.Skypixel;
 import io.prplz.skypixel.gui.BooleanPropertyButton;
 import io.prplz.skypixel.gui.ChatColorPropertyPicker;
 import io.prplz.skypixel.gui.EnumPropertyButton;
-import io.prplz.skypixel.gui.GuiItem;
 import io.prplz.skypixel.gui.Image;
 import io.prplz.skypixel.gui.Label;
 import io.prplz.skypixel.gui.Pane;
@@ -75,6 +74,14 @@ public class SettingsGui extends GuiScreen {
                 Feature.enabledIf(settings.hideNpcsOnTab),
                 new FeaturePane(
                         new BooleanPropertyButton(settings.hideNpcsOnTab, FEATURE_HIDE_NPCS_ON_TAB::format, 200)
+                )
+        ));
+        features.add(new Feature(
+                FEATURE_HITBOXES.format(),
+                Feature.enabledIf(() -> settings.mobHitboxes.get() || settings.playerHitboxes.get()),
+                new FeaturePane(
+                        new BooleanPropertyButton(settings.mobHitboxes, FEATURE_MOB_HITBOXES::format, 200),
+                        new BooleanPropertyButton(settings.playerHitboxes, FEATURE_PLAYER_HITBOXES::format, 200)
                 )
         ));
         features.add(new Feature(

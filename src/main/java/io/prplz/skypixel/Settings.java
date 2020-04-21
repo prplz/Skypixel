@@ -28,6 +28,8 @@ public class Settings {
     public Property<Boolean> hidePlayersNearNpcs = new Property<>(false);
     public Property<Boolean> hideNpcsOnTab = new Property<>(false);
     public Property<Boolean> hideEndPortals = new Property<>(false);
+    public Property<Boolean> playerHitboxes = new Property<>(false);
+    public Property<Boolean> mobHitboxes = new Property<>(false);
 
 
     @SuppressWarnings("unused")

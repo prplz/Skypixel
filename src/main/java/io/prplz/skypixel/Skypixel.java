@@ -11,17 +11,24 @@ import io.prplz.skypixel.utils.TickExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -33,6 +40,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -266,6 +274,32 @@ public class Skypixel {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onRenderLiving(RenderLivingEvent.Post<EntityLivingBase> event) {
+        if (settings.playerHitboxes.get() && event.entity instanceof EntityPlayer && !event.entity.isInvisible()) {
+            drawHitbox(event.entity);
+        } else if (settings.mobHitboxes.get() && event.entity instanceof EntityLiving && !event.entity.isInvisible()) {
+            drawHitbox(event.entity);
+        }
+    }
+
+    private void drawHitbox(EntityLivingBase entity) {
+        float floatPartialTicks = Animation.getPartialTickTime();
+        double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * floatPartialTicks - mc.getRenderManager().viewerPosX;
+        double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * floatPartialTicks - mc.getRenderManager().viewerPosY;
+        double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * floatPartialTicks - mc.getRenderManager().viewerPosZ;
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        double width = entity.width / 2 + 0.1;
+        AxisAlignedBB box = new AxisAlignedBB(x - width, y - 0.1, z - width, x + width, y + entity.height + 0.1, z + width);
+        GL11.glLineWidth(2f);
+        RenderGlobal.drawOutlinedBoundingBox(box, 255, 255, 255, 255);
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableCull();
     }
 
     public boolean shouldHideEntity(Entity entity) {
