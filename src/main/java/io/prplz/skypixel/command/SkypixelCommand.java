@@ -22,7 +22,6 @@ public class SkypixelCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         Skypixel.get().getTickExecutor().execute(() -> {
             SettingsGui gui = new SettingsGui(null);
-            gui.setFromCommand(true);
             Minecraft.getMinecraft().displayGuiScreen(gui);
         });
     }

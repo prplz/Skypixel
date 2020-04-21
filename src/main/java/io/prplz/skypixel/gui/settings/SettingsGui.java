@@ -1,10 +1,12 @@
 package io.prplz.skypixel.gui.settings;
 
+import com.google.common.collect.ObjectArrays;
 import io.prplz.skypixel.Settings;
 import io.prplz.skypixel.Skypixel;
 import io.prplz.skypixel.gui.BooleanPropertyButton;
 import io.prplz.skypixel.gui.ChatColorPropertyPicker;
 import io.prplz.skypixel.gui.EnumPropertyButton;
+import io.prplz.skypixel.gui.GuiItem;
 import io.prplz.skypixel.gui.Image;
 import io.prplz.skypixel.gui.Label;
 import io.prplz.skypixel.gui.Pane;
@@ -25,7 +27,6 @@ public class SettingsGui extends GuiScreen {
     private FeatureList featureList;
     private final List<Feature> features = new ArrayList<>();
     private Pane rightPane;
-    private boolean fromCommand;
 
     public SettingsGui(GuiScreen parent) {
         this.parent = parent;
@@ -122,19 +123,11 @@ public class SettingsGui extends GuiScreen {
         ));
         featureList = new FeatureList(this, features);
 
-        String text = "Select a feature on the left to get started.";
-        if (!fromCommand) {
-            text += "\nYou can access this menu in-game using the \u00a7e/skypixel\u00a7r command.";
+        Label[] labels = new Label[]{Label.of("Select a feature on the left to get started.")};
+        if (parent != null) {
+            labels = ObjectArrays.concat(labels, Label.of("You can access this menu in-game using the \u00a7e/skypixel\u00a7r command."));
         }
-        rightPane = new FeaturePane(Label.of(text));
-    }
-
-    public boolean isFromCommand() {
-        return fromCommand;
-    }
-
-    public void setFromCommand(boolean fromCommand) {
-        this.fromCommand = fromCommand;
+        rightPane = new FeaturePane(labels);
     }
 
     @Override
