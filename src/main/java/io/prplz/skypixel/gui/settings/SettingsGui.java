@@ -64,9 +64,16 @@ public class SettingsGui extends GuiScreen {
         ));
         features.add(new Feature(
                 FEATURE_HIDE_PLAYERS.format(),
-                Feature.enabledIf(() -> settings.hidePlayersNearNpcs.get()),
+                Feature.enabledIf(settings.hidePlayersNearNpcs),
                 new FeaturePane(
                         new BooleanPropertyButton(settings.hidePlayersNearNpcs, FEATURE_HIDE_PLAYERS_NEAR_NPCS::format, 200)
+                )
+        ));
+        features.add(new Feature(
+                FEATURE_TAB_LIST_TWEAKS.format(),
+                Feature.enabledIf(settings.hideNpcsOnTab),
+                new FeaturePane(
+                        new BooleanPropertyButton(settings.hideNpcsOnTab, FEATURE_HIDE_NPCS_ON_TAB::format, 200)
                 )
         ));
         features.add(new Feature(

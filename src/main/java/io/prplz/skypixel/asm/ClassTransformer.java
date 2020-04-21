@@ -3,6 +3,7 @@ package io.prplz.skypixel.asm;
 import io.prplz.skypixel.asm.patcher.ClassPatcher;
 import io.prplz.skypixel.asm.patcher.ClientCommandHandlerPatcher;
 import io.prplz.skypixel.asm.patcher.EntityRendererPatcher;
+import io.prplz.skypixel.asm.patcher.GuiPlayerTabOverlayPatcher;
 import io.prplz.skypixel.asm.patcher.ItemStackPatcher;
 import io.prplz.skypixel.asm.patcher.RenderItemPatcher;
 import io.prplz.skypixel.asm.patcher.RenderManagerPatcher;
@@ -26,6 +27,7 @@ public class ClassTransformer implements IClassTransformer {
         patchers.put("net.minecraft.client.renderer.entity.RenderManager", new RenderManagerPatcher());
         patchers.put("net.minecraft.client.renderer.EntityRenderer", new EntityRendererPatcher());
         patchers.put("net.minecraft.client.renderer.tileentity.TileEntityEndPortalRenderer", new TileEntityEndPortalRendererPatcher());
+        patchers.put("net.minecraft.client.gui.GuiPlayerTabOverlay", new GuiPlayerTabOverlayPatcher());
     }
 
     @Override

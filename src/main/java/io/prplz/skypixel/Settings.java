@@ -26,6 +26,7 @@ public class Settings {
     public Property<NumeralType> itemTierType = new Property<>(NumeralType.ROMAN);
     public Property<Boolean> forgeClientCommandFix = new Property<>(true);
     public Property<Boolean> hidePlayersNearNpcs = new Property<>(false);
+    public Property<Boolean> hideNpcsOnTab = new Property<>(false);
     public Property<Boolean> hideEndPortals = new Property<>(false);
 
 
