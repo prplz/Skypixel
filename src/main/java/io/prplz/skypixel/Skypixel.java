@@ -332,6 +332,7 @@ public class Skypixel {
             mc.getTextureManager().bindTexture(BARS_RESOURCE);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.disableBlend();
+            GlStateManager.enableAlpha();
             int x = width / 2 - hotbarWidth / 2;
             int y = height - 38;
             String text = skyblockHealth + "/" + skyblockHealthMax;
@@ -347,7 +348,6 @@ public class Skypixel {
 
             mc.getTextureManager().bindTexture(BARS_RESOURCE);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.disableBlend();
             x = width / 2 + hotbarWidth / 2 - barWidth;
             y = height - 38;
             text = mana + "/" + manaMax;
