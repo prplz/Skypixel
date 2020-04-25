@@ -10,23 +10,31 @@ import io.prplz.skypixel.utils.ScoreboardUtils;
 import io.prplz.skypixel.utils.TickExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.GuiIngameForge;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,6 +56,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static net.minecraftforge.fml.common.Mod.EventHandler;
 
@@ -300,6 +310,94 @@ public class Skypixel {
         GlStateManager.enableTexture2D();
         GlStateManager.enableLighting();
         GlStateManager.enableCull();
+    }
+
+    public static final ResourceLocation BARS_RESOURCE = new ResourceLocation("skypixel", "gui/bars.png");
+
+    @SubscribeEvent
+    public void onRenderGameOverlayPre(RenderGameOverlayEvent.Pre event) {
+        if (!inSkyblock) {
+            return;
+        }
+        if (event.type == RenderGameOverlayEvent.ElementType.ARMOR || event.type == RenderGameOverlayEvent.ElementType.HEALTHMOUNT || event.type == RenderGameOverlayEvent.ElementType.FOOD) {
+            event.setCanceled(true);
+        } else if (event.type == RenderGameOverlayEvent.ElementType.HEALTH) {
+            event.setCanceled(true);
+            int width = event.resolution.getScaledWidth();
+            int height = event.resolution.getScaledHeight();
+            int barWidth = 81;
+            int hotbarWidth = 182;
+            IAttributeInstance attrMaxHealth = mc.thePlayer.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+            float healthMax = (float) attrMaxHealth.getAttributeValue();
+            mc.getTextureManager().bindTexture(BARS_RESOURCE);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.disableBlend();
+            int x = width / 2 - hotbarWidth / 2;
+            int y = height - 38;
+            String text = skyblockHealth + "/" + skyblockHealthMax;
+            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 20, barWidth, 5);
+            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 25, MathHelper.ceiling_float_int(barWidth * mc.thePlayer.getHealth() / healthMax), 5);
+            x += barWidth / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
+            y -= 6;
+            mc.fontRendererObj.drawString(text, x + 1, y, 0);
+            mc.fontRendererObj.drawString(text, x - 1, y, 0);
+            mc.fontRendererObj.drawString(text, x, y + 1, 0);
+            mc.fontRendererObj.drawString(text, x, y - 1, 0);
+            mc.fontRendererObj.drawString(text, x, y, 0xff5555);
+
+            mc.getTextureManager().bindTexture(BARS_RESOURCE);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.disableBlend();
+            x = width / 2 + hotbarWidth / 2 - barWidth;
+            y = height - 38;
+            text = mana + "/" + manaMax;
+            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 10, barWidth, 5);
+            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 15, MathHelper.ceiling_float_int((float) barWidth * mana / manaMax), 5);
+            x += barWidth / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
+            y -= 6;
+            mc.fontRendererObj.drawString(text, x + 1, y, 0);
+            mc.fontRendererObj.drawString(text, x - 1, y, 0);
+            mc.fontRendererObj.drawString(text, x, y + 1, 0);
+            mc.fontRendererObj.drawString(text, x, y - 1, 0);
+            mc.fontRendererObj.drawString(text, x, y, 0x55ffff);
+
+            GuiIngameForge.left_height = GuiIngameForge.right_height = 55;
+
+            mc.getTextureManager().bindTexture(Gui.icons);
+        }
+    }
+
+    public int mana = 1;
+    public int manaMax = 1;
+
+    public int skyblockHealth = 1;
+    public int skyblockHealthMax = 1;
+
+    private static final Pattern HEALTH_PATTERN = Pattern.compile("(\\d+)/(\\d+)\u2764");
+    private static final Pattern MANA_PATTERN = Pattern.compile("(\\d+)/(\\d+)\u270e");
+    private static final Pattern SKILL_PATTERN = Pattern.compile("(\\+(.*) (.*) \\((.*)/(.*)\\))");
+
+    @SubscribeEvent
+    public void onChat(ClientChatReceivedEvent event) {
+        if (event.type == 2 && inSkyblock) {
+            event.setCanceled(true);
+            String message = event.message.getFormattedText();
+            Matcher healthMatcher = HEALTH_PATTERN.matcher(message);
+            if (healthMatcher.find()) {
+                skyblockHealth = Integer.parseInt(healthMatcher.group(1));
+                skyblockHealthMax = Integer.parseInt(healthMatcher.group(2));
+            }
+            Matcher manaMatcher = MANA_PATTERN.matcher(message);
+            if (manaMatcher.find()) {
+                mana = Integer.parseInt(manaMatcher.group(1));
+                manaMax = Integer.parseInt(manaMatcher.group(2));
+            }
+            Matcher skillMatcher = SKILL_PATTERN.matcher(message);
+            if (skillMatcher.find()) {
+                event.message = new ChatComponentText(EnumChatFormatting.YELLOW + skillMatcher.group(1));
+                event.setCanceled(false);
+            }
+        }
     }
 
     public boolean shouldHideEntity(Entity entity) {
