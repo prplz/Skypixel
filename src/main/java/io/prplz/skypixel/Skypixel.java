@@ -354,7 +354,7 @@ public class Skypixel {
         mc.getTextureManager().bindTexture(BARS_RESOURCE);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.ingameGUI.drawTexturedModalRect(x, y, 0, type, width, 5);
-        mc.ingameGUI.drawTexturedModalRect(x, y, 0, type + 5, MathHelper.ceiling_float_int(progress * width), 5);
+        mc.ingameGUI.drawTexturedModalRect(x, y, 0, type + 5, Math.min(width, MathHelper.ceiling_float_int(progress * width)), 5);
         x += width / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
         y -= 6;
         mc.fontRendererObj.drawString(text, x + 1, y, 0);
