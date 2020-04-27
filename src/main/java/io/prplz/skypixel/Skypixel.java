@@ -25,7 +25,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
@@ -79,6 +78,7 @@ public class Skypixel {
     private TickExecutor tickExecutor;
     private FontRenderer romanNumeralsFont;
     private final List<EntityPlayer> npcs = new ArrayList<>();
+    private int currentTick = 0;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -194,6 +194,7 @@ public class Skypixel {
         if (mc.thePlayer == null || event.phase != TickEvent.Phase.END) {
             return;
         }
+        currentTick++;
 
         if (!inHypixel) {
             // Does tab header contain MC.HYPIXEL.NET"
@@ -329,59 +330,57 @@ public class Skypixel {
             int hotbarWidth = 182;
             IAttributeInstance attrMaxHealth = mc.thePlayer.getEntityAttribute(SharedMonsterAttributes.maxHealth);
             float healthMax = (float) attrMaxHealth.getAttributeValue();
-            mc.getTextureManager().bindTexture(BARS_RESOURCE);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.disableBlend();
             GlStateManager.enableAlpha();
-            int x = width / 2 - hotbarWidth / 2;
-            int y = height - 38;
-            String text = skyblockHealth + "/" + skyblockHealthMax;
-            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 20, barWidth, 5);
-            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 25, MathHelper.ceiling_float_int(barWidth * mc.thePlayer.getHealth() / healthMax), 5);
-            x += barWidth / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
-            y -= 6;
-            mc.fontRendererObj.drawString(text, x + 1, y, 0);
-            mc.fontRendererObj.drawString(text, x - 1, y, 0);
-            mc.fontRendererObj.drawString(text, x, y + 1, 0);
-            mc.fontRendererObj.drawString(text, x, y - 1, 0);
-            mc.fontRendererObj.drawString(text, x, y, 0xff5555);
-
-            mc.getTextureManager().bindTexture(BARS_RESOURCE);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            x = width / 2 + hotbarWidth / 2 - barWidth;
-            y = height - 38;
-            text = mana + "/" + manaMax;
-            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 10, barWidth, 5);
-            mc.ingameGUI.drawTexturedModalRect(x, y, 0, 15, MathHelper.ceiling_float_int((float) barWidth * mana / manaMax), 5);
-            x += barWidth / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
-            y -= 6;
-            mc.fontRendererObj.drawString(text, x + 1, y, 0);
-            mc.fontRendererObj.drawString(text, x - 1, y, 0);
-            mc.fontRendererObj.drawString(text, x, y + 1, 0);
-            mc.fontRendererObj.drawString(text, x, y - 1, 0);
-            mc.fontRendererObj.drawString(text, x, y, 0x55ffff);
-
-            GuiIngameForge.left_height = GuiIngameForge.right_height = 55;
+            drawBar(width / 2 - hotbarWidth / 2, height - 38, barWidth, skyblockHealth + "/" + skyblockHealthMax, mc.thePlayer.getHealth() / healthMax, 0xff5555, 20);
+            drawBar(width / 2 + hotbarWidth / 2 - barWidth, height - 38, barWidth, mana + "/" + manaMax, (float) mana / manaMax, 0x55ffff, 10);
+            if (skillText != null && currentTick - skillTick < 100) {
+                int y = 55;
+                if (mc.ingameGUI.remainingHighlightTicks > 0 && mc.gameSettings.heldItemTooltips) {
+                    y += 14;
+                }
+                drawBar(width / 2 - hotbarWidth / 2, height - y, hotbarWidth, skillText, skillProgress, 0xffff55, 110);
+                GuiIngameForge.left_height = GuiIngameForge.right_height = y + 17;
+            } else {
+                GuiIngameForge.left_height = GuiIngameForge.right_height = 55;
+            }
 
             mc.getTextureManager().bindTexture(Gui.icons);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
-    public int mana = 1;
-    public int manaMax = 1;
+    private void drawBar(int x, int y, int width, String text, float progress, int color, int type) {
+        mc.getTextureManager().bindTexture(BARS_RESOURCE);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.ingameGUI.drawTexturedModalRect(x, y, 0, type, width, 5);
+        mc.ingameGUI.drawTexturedModalRect(x, y, 0, type + 5, MathHelper.ceiling_float_int(progress * width), 5);
+        x += width / 2 - mc.fontRendererObj.getStringWidth(text) / 2;
+        y -= 6;
+        mc.fontRendererObj.drawString(text, x + 1, y, 0);
+        mc.fontRendererObj.drawString(text, x - 1, y, 0);
+        mc.fontRendererObj.drawString(text, x, y + 1, 0);
+        mc.fontRendererObj.drawString(text, x, y - 1, 0);
+        mc.fontRendererObj.drawString(text, x, y, color);
+    }
 
-    public int skyblockHealth = 1;
-    public int skyblockHealthMax = 1;
+    private int mana = 1;
+    private int manaMax = 1;
+    private int skyblockHealth = 1;
+    private int skyblockHealthMax = 1;
+    private String skillText = null;
+    private float skillProgress = 1f;
+    private int skillTick = 0;
 
     private static final Pattern HEALTH_PATTERN = Pattern.compile("(\\d+)/(\\d+)\u2764");
     private static final Pattern MANA_PATTERN = Pattern.compile("(\\d+)/(\\d+)\u270e");
-    private static final Pattern SKILL_PATTERN = Pattern.compile("(\\+(.*) (.*) \\((.*)/(.*)\\))");
+    private static final Pattern SKILL_PATTERN = Pattern.compile("(\\+([\\d.,]+) ([^ ]+) \\(([\\d.,]+)/([\\d.,]+)\\))");
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         if (event.type == 2 && inSkyblock) {
             event.setCanceled(true);
-            String message = event.message.getFormattedText();
+            String message = event.message.getUnformattedText();
             Matcher healthMatcher = HEALTH_PATTERN.matcher(message);
             if (healthMatcher.find()) {
                 skyblockHealth = Integer.parseInt(healthMatcher.group(1));
@@ -394,8 +393,11 @@ public class Skypixel {
             }
             Matcher skillMatcher = SKILL_PATTERN.matcher(message);
             if (skillMatcher.find()) {
-                event.message = new ChatComponentText(EnumChatFormatting.YELLOW + skillMatcher.group(1));
-                event.setCanceled(false);
+                skillText = skillMatcher.group(1);
+                float skillExp = Float.parseFloat(skillMatcher.group(4).replace(",", ""));
+                float skillExpMax = Float.parseFloat(skillMatcher.group(5).replace(",", ""));
+                skillProgress = skillExp / skillExpMax;
+                skillTick = currentTick;
             }
         }
     }
