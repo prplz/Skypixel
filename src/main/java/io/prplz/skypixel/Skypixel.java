@@ -320,7 +320,7 @@ public class Skypixel {
         if (!inSkyblock) {
             return;
         }
-        if (event.type == RenderGameOverlayEvent.ElementType.ARMOR || event.type == RenderGameOverlayEvent.ElementType.HEALTHMOUNT || event.type == RenderGameOverlayEvent.ElementType.FOOD) {
+        if (event.type == RenderGameOverlayEvent.ElementType.ARMOR || event.type == RenderGameOverlayEvent.ElementType.HEALTHMOUNT || event.type == RenderGameOverlayEvent.ElementType.FOOD || event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
             event.setCanceled(true);
         } else if (event.type == RenderGameOverlayEvent.ElementType.HEALTH) {
             event.setCanceled(true);
@@ -332,17 +332,30 @@ public class Skypixel {
             float healthMax = (float) attrMaxHealth.getAttributeValue();
             GlStateManager.disableBlend();
             GlStateManager.enableAlpha();
-            drawBar(width / 2 - hotbarWidth / 2, height - 38, barWidth, skyblockHealth + "/" + skyblockHealthMax, mc.thePlayer.getHealth() / healthMax, 0xff5555, 20);
-            drawBar(width / 2 + hotbarWidth / 2 - barWidth, height - 38, barWidth, mana + "/" + manaMax, (float) mana / manaMax, 0x55ffff, 10);
+
+            // Speed
+            int walkSpeed = MathHelper.floor_float(mc.thePlayer.capabilities.getWalkSpeed() * 1000);
+            drawBar(width / 2 - hotbarWidth / 2, height - 29, barWidth, walkSpeed + "", walkSpeed / 400f, 0xffffff, 60);
+
+            // Experience
+            drawBar(width / 2 + hotbarWidth / 2 - barWidth, height - 29, barWidth, mc.thePlayer.experienceLevel + "", mc.thePlayer.experience, 0x55ff55, 30);
+
+            // Health
+            drawBar(width / 2 - hotbarWidth / 2, height - 42, barWidth, skyblockHealth + "/" + skyblockHealthMax, mc.thePlayer.getHealth() / healthMax, 0xff5555, 20);
+
+            // Mana
+            drawBar(width / 2 + hotbarWidth / 2 - barWidth, height - 42, barWidth, mana + "/" + manaMax, (float) mana / manaMax, 0x55ffff, 10);
+
+            // Skill
             if (skillText != null && currentTick - skillTick < 100) {
                 int y = 55;
                 if (mc.ingameGUI.remainingHighlightTicks > 0 && mc.gameSettings.heldItemTooltips) {
-                    y += 14;
+                    y += 12;
                 }
                 drawBar(width / 2 - hotbarWidth / 2, height - y, hotbarWidth, skillText, skillProgress, 0xffff55, 110);
                 GuiIngameForge.left_height = GuiIngameForge.right_height = y + 17;
             } else {
-                GuiIngameForge.left_height = GuiIngameForge.right_height = 55;
+                GuiIngameForge.left_height = GuiIngameForge.right_height = 59;
             }
 
             mc.getTextureManager().bindTexture(Gui.icons);
